@@ -63,10 +63,11 @@ Most users not readily familiar with 12h format are instantly confused by this. 
 
 ## Solution specification
 
-- For times **before** `noon` (< 12:00 pm) we will show time in 12h format - attaching `am` to time. This is always clear. Example: `10:00 am`
-- For `noon` (= 12:xx pm) we will show this: `12:15 pm (noon)`. If we also show emoji, this is represented with ☀️.
-- For times **after** `noon` (>= 13:00 pm) we will show the time in **both formats** (24h and 12h). Example: `19:50 (7:50 pm)`
-- In addition we always clarify what time of day it is (`morning`, `daytime`, `noon`, ` evening` or `night`). Example: `19:50 (7:50 pm) evening`
+- For times just after midnight (= 0:xx / 12:xx am) we will show time in both formats with additional `midnight` tag. Example: `0:50 (12:50 am) midnight`
+- For times before `noon` (< 12:00) (excluding midnight) we will show time in 12h format - attaching `am` to time. This is always clear. Example: `10:00 am`
+- For `noon` (= 12:xx) we will show this: `12:15 (noon)`. If we also show emoji, this is represented with ☀️.
+- For times after `noon` (>= 13:00) we will show the time in **both formats** (24h and 12h). Example: `19:50 (7:50 pm)`
+- In addition we always clarify what time of day it is (`morning`, `daytime`, `noon`, ` evening` or `night` / `midnight`). Example: `19:50 (7:50 pm) evening`
 - Furthermore we can show an **emoji** as well. 
 - We also allow users to always see the date/time in `UTC` timezone besides their local timezone.
 
@@ -95,7 +96,7 @@ const { date, time, timeClarification, emoji, timezone, parts } = weblocaltime(d
     monthShort: 'Dec',
     monthNumeric: '12',
     year: '2020',
-    hour: '19',
+    hour24: '19',
     minute: '50',
     second: '00',
     weekday: 'Wednesday',
@@ -136,7 +137,7 @@ const { date, time, timeClarification, emoji, timezone, parts } = weblocaltime(d
     monthShort: 'Dec',
     monthNumeric: '12',
     year: '2020',
-    hour: '09',
+    hour24: '09',
     minute: '20',
     second: '00',
     weekday: 'Saturday',
