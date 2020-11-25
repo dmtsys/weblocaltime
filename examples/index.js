@@ -7,6 +7,7 @@ console.log(webLocalTime(new Date('2020-11-27T11:15:00+0000')));
 //   time: '12:15',
 //   timeClarification: 'noon',
 //   emoji: '☀️',
+//   daytime: 'noon',
 //   timezone: 'Central European Standard Time',
 //   parts: {…}
 // }
@@ -18,6 +19,7 @@ console.log(webLocalTime(new Date('2020-11-27T09:30:00+0100')));
 //   time: '9:30 am',
 //   timeClarification: 'morning',
 //   emoji: '🌅',
+//   daytime: 'morning',
 //   timezone: 'Central European Standard Time',
 //   parts: {…}
 // }
@@ -29,6 +31,7 @@ console.log(webLocalTime(new Date('2020-11-27T15:02:00+0100'), { utc: true }));
 //   time: '14:02',
 //   timeClarification: '(2:02 pm) daytime',
 //   emoji: '🏙️',
+//   daytime: 'daytime',
 //   timezone: 'Coordinated Universal Time (UTC)',
 //   parts: {…}
 // }
@@ -40,6 +43,7 @@ console.log(webLocalTime(new Date('2020-12-31T22:50:00-0200')));
 //   time: '1:50 am',
 //   timeClarification: 'night',
 //   emoji: '🌙',
+//   daytime: 'night',
 //   timezone: 'Central European Standard Time',
 //   parts: {…}
 // }
@@ -51,6 +55,7 @@ console.log(webLocalTime(new Date('2020-12-30T20:50:00+0300'), { showYear: false
 //   time: '18:50',
 //   timeClarification: '(6:50 pm) evening'
 //   emoji: '🌆',
+//   daytime: 'evening',
 //   timezone: 'Central European Standard Time',
 //   parts: {…}
 // }
@@ -63,6 +68,7 @@ console.log(webLocalTime(new Date('2020-12-31T23:00:00+0000')));
 //   time: '0:00',
 //   timeClarification: '(12:00 am) midnight',
 //   emoji: '🌚',
+//   daytime: 'midnight',
 //   timezone: 'Central European Standard Time',
 //   parts: {…}
 // }

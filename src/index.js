@@ -33,6 +33,33 @@ function localTime(date, { utc = false } = {}) {
   };
 }
 
+function getDaytime(hour) {
+  let emoji;
+  let daytime;
+
+  if (hour == 0) {
+    daytime = 'midnight';
+    emoji = '🌚';
+  } else if ((hour > 0 && hour < 5) || hour == 23) {
+    daytime = 'night';
+    emoji = '🌙';
+  } else if (hour >= 5 && hour < 10) {
+    daytime = 'morning';
+    emoji = '🌅';
+  } else if (hour == 12) {
+    daytime = 'noon'; // 12:30 pm (noon)
+    emoji = '☀️';
+  } else if (hour >= 10 && hour < 17) {
+    daytime = 'daytime';
+    emoji = '🏙️';
+  } else if (hour >= 17) {
+    daytime = 'evening';
+    emoji = '🌆';
+  }
+
+  return { daytime, emoji };
+}
+
 function weblocaltime(date, { utc = false, showYear = true } = {}) {
   const parts = localTime(date, { utc });
 
@@ -46,31 +73,13 @@ function weblocaltime(date, { utc = false, showYear = true } = {}) {
     timeClarification = `(${time12})`;
   }
 
-  let emoji;
+  const { daytime, emoji } = getDaytime(hour);
 
-  if (hour == 0) {
-    timeClarification += ' midnight';
-    emoji = '🌚';
-  } else if ((hour > 0 && hour < 5) || hour == 23) {
-    timeClarification += ' night';
-    emoji = '🌙';
-  } else if (hour >= 5 && hour < 10) {
-    timeClarification += ' morning';
-    emoji = '🌅';
-  } else if (hour == 12) {
-    timeClarification += ' noon'; // 12:30 pm (noon)
-    emoji = '☀️';
-  } else if (hour >= 10 && hour < 17) {
-    timeClarification += ' daytime';
-    emoji = '🏙️';
-  } else if (hour >= 17) {
-    timeClarification += ' evening';
-    emoji = '🌆';
-  }
+  timeClarification += ` ${daytime}`;
 
   const displayDate = `${weekday} ${monthShort} ${day} ${showYear ? year : ''}`.trim();
 
-  return { date: displayDate, time: displayTime, timeClarification: timeClarification.trim(), emoji, timezone: parts.timezone, parts };
+  return { date: displayDate, time: displayTime, timeClarification: timeClarification.trim(), emoji, daytime, timezone: parts.timezone, parts };
 }
 
 export default weblocaltime;

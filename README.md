@@ -11,7 +11,7 @@ This document became more extensive than planned but let not that confuse you, y
 
 If you are **really curious** join our weekly meetups where you can learn more great **Digital Mastery Techniques**. Sometimes in _boring detail_ that can be readily forgotten and abstracted away as soon as you wish.
 
-We are developing a [search engine](https://zetaseek.com) that can bring out these details later as needed _if needed_. 
+We are developing a [search engine](https://zetaseek.com) that can bring out these details later as needed _if needed_.
 
 Computers are great for **a)** speed **b)** storing boring details. **Let's get back to our subject at ✋hand now.**
 
@@ -95,7 +95,7 @@ function weblocaltime(date, { utc = false, showYear = true } = {}) { … }
 
 You can see the demo of the library in action at [dmt-system](https://dmt-system.com).
 
-Check out the demo and you are also invited to join one of our meetings. 
+Check out the demo and you are also invited to join one of our meetings.
 
 > Welcome to provide ideas or just listen — anonymously or not.
 
@@ -135,16 +135,16 @@ function toggleUTC() {
 **HTML template part (view):**
 
 ```html
-<div class="starts_at">              
+<div class="starts_at">
   <span class="event_time">
-    {startsAt.emoji} {startsAt.date} 
-    <span class='deemph'>at</span> 
+    {startsAt.emoji} {startsAt.date}
+    <span class='deemph'>at</span>
     {startsAt.time} <span class='deemph'>{startsAt.timeClarification}</span>
-  </span>              
+  </span>
 </div>
 
 <div class="timezone">
-  {startsAt.timezone} | 
+  {startsAt.timezone} |
   <a href="#" on:click|preventDefault={() => toggleUTC()}>{displayUTC ? 'My timezone' : 'UTC'}</a>
 </div>
 ```
@@ -157,13 +157,13 @@ If you are good with **Svelte** and **HTML / CSS** please write to info@uniqpath
 
 You can also create an issue in this GitHub repository or talk to us through [Discord](https://discord.gg/XvJzmtF).
 
-This task is paid fairly but must be executed in at most 1-2 weeks from the start and with high quality. 
+This task is paid fairly but must be executed in at most 1-2 weeks from the start and with high quality.
 
 Thank you very much.
 
 <hr>
 
-There is more opportunities besides the creation of **Local Time Event Svelte component**. 
+There is more opportunities besides the creation of **Local Time Event Svelte component**.
 
 If you think you can improve this library in any way, please reach  out, now is the right time to define and consolidate api, do some more testing and release the `v1.0` of this simple utility.
 
@@ -207,7 +207,7 @@ Most users who are not readily familiar with 12h format are instantly confused b
 - For `noon` (= 12:xx) we will show this: `12:15 (noon)`. If we also show emoji, this is represented with ☀️.
 - For times after `noon` (>= 13:00) we will show the time in **both formats** (24h and 12h). Example: `19:50 (7:50 pm)`
 - In addition we always clarify what time of day it is (`morning`, `daytime`, `noon`, ` evening` or `night` / `midnight`). Example: `19:50 (7:50 pm) evening`
-- Furthermore we can show an **emoji** as well: 🌚 → 🌙 → 🌅 → 🏙️ → ☀️ → 🏙️ → 🌆 → 🌙 → 🌚 
+- Furthermore we can show an **emoji** as well: 🌚 → 🌙 → 🌅 → 🏙️ → ☀️ → 🏙️ → 🌆 → 🌙 → 🌚
 - We also allow users to always see the date/time in `UTC` timezone besides their local timezone.
 
 This should do the trick. [Solution](https://github.com/dmtsys/weblocaltime/blob/main/src/index.js) is around 70 LOC _(lines-of-code)_.
@@ -228,6 +228,7 @@ const { date, time, timeClarification, emoji, timezone, parts } = weblocaltime(d
   time: '19:50',
   timeClarification: '(7:50 pm) evening',
   emoji: '🌆',
+  daytime: 'evening',
   timezone: 'Central European Standard Time',
   parts: {
     day: '30',
@@ -269,6 +270,7 @@ const { date, time, timeClarification, emoji, timezone, parts } = weblocaltime(d
   time: '9:20 am',
   timeClarification: 'morning',
   emoji: '🌅',
+  daytime: 'morning',
   timezone: 'Coordinated Universal Time (UTC)',
   parts: {
     day: '5',
