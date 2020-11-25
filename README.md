@@ -1,27 +1,105 @@
 # weblocaltime
 > Reliably convert time to local timezone in user browser.
 
-Recently everyone is organizing a lot of online events and conferences and a lot of them show dates in ways that are very easy to misinterpret.
+![demo](img/dmt_meetup_example.png)
 
-Hopefully this library / approach can solve this problem in a clear way. 
+Recently everyone is organizing a lot of online events or conferences and many of them show dates in ways that are very easy to misinterpret. **This library / approach solves the problem in a minimal and clear way.**
 
-**weblocaltime library** solves the issue in two steps:
+This document became more extensive than planned but let not that confuse you, you only have to read 10% of it to understand exactly **how and why** to use this library. The rest are details if you happen to be a more curious type 🐰.
 
-- 1) correctly applies the modern browser [Intl Date Format API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) to convert dates to web browser local timezone
+If you are **really curious** join our weekly meetups where you can learn more great **Digital Mastery Techniques**. Sometimes in _boring detail_ that can be readily forgotten and abstracted away as soon as you wish.
 
-- 2) adds additional clarification to date/time presentation to cover all possibilities for misunderstanding
+We are developing a [search engine](https://zetaseek.com) that can bring out these details later as needed _if needed_. 
 
-Library works in environments besides web browser that also support the Intl API, for example [Node.js](https://nodejs.org/) and [Deno](https://deno.land/).
+Computers are great for **a)** speed **b)** storing boring details. **Let's get back to our subject at ✋hand now.**
+
+## How weblocaltime works
+
+**weblocaltime** is a **function** that solves the issue of clear local date/time representation in two steps:
+
+**1)** correctly applies the modern browser [Intl Date Format API](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/DateTimeFormat) to convert dates to web browser local timezone
+
+**2)** properly formats the resulting time and adds additional clarification to date/time presentation to prevent all possibilities for misunderstanding
+
+![weblocaltime_function_diagram](img/weblocaltime_function_diagram.png)
+
+<hr>
+
+Library works in environments besides web browser that also support the **Intl API**, for example [Node.js](https://nodejs.org/) and [Deno](https://deno.land/).
+
+Library exports only one function:
+
+```js
+export default weblocaltime;
+```
+
+Import it (`node.js`):
+
+```
+npm install weblocaltime
+```
+
+```js
+import weblocaltime from 'weblocaltime';
+```
+
+Or directly in your frontend using [jspm](https://jspm.org/) without even needing to bundle or serve it yourself:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <script type="module">
+    // Statically:
+    import weblocaltime from 'https://jspm.dev/weblocaltime';
+    console.log("Static import from jspm:");
+    console.log(weblocaltime(new Date('2020-12-31T23:00:00+0000')));
+
+    // Dynamically:
+    (async () => {
+      const { default: weblocaltime } = await import('//jspm.dev/weblocaltime');
+      console.log("Dynamic import from jspm ...");
+      const { date, time, timeClarification, emoji, timezone } = weblocaltime(new Date('2020-12-31T23:00:00+0000'));
+      document.querySelector('span').innerText = `${emoji} ${date} at ${time} ${timeClarification} — ${timezone}`;
+    })();
+  </script>
+</head>
+
+<body>
+  Date: <span></span> <!-- 🌚 Friday Jan 1 2021 at 0:00 (12:00 am) midnight — Central European Standard Time -->
+</body>
+
+</html>
+```
+
+Read more about the new [ES6 modules usage in browser](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules).
+
+You can create your own frontend bundle using [rollup.js](https://rollupjs.org/) or a similar bundler tool.
+
+## Function API
+
+Function expects two arguments.
+
+```js
+function weblocaltime(date, { utc = false, showYear = true } = {}) { … }
+```
+
+1) **required** → standard _JavaScript_ `Date` object
+
+2) _optional_ → `utc: bool`, `showYear: bool` which are explained later in this document
 
 ## Demo of actual use case
 
-![demo](img/dmt_meetup_example.png)
-
 You can see the demo of the library in action at [dmt-system](https://dmt-system.com).
 
-Check out the demo and you are also invited to join one of our meetings. Welcome to provide ideas or just listen — anonymously or not.
+Check out the demo and you are also invited to join one of our meetings. 
+
+> Welcome to provide ideas or just listen — anonymously or not.
 
 <hr>
+
+Some background about our project **(optional reading)** →
 
 [**dmt-system**](https://dmt-system.com) is about _easy to use performant fully-contained networked local-first apps_ that integrate well with other modern platforms and technologies and are under end users' total control.
 
@@ -32,7 +110,66 @@ Check out the demo and you are also invited to join one of our meetings. Welcome
 
 **weblocaltime** was implemented to solve the practical problem of online meetup coordination for our R&D purposes and since it worked well, we are sharing the code / approach.
 
-## Definition of the problem that weblocaltime library solves
+Actual example GUI implementation in [Svelte](https://svelte.dev/) framework for _dmt-system website_ is here:
+
+**JavaScript logic part**:
+
+```js
+import weblocaltime from 'weblocaltime';
+
+// … get 'startsAtUnixTimestamp' over the wire with the help of connectome library
+
+$: _startsAt = startsAtUnixTimestamp ? new Date(startsAtUnixTimestamp) : undefined;
+
+let displayUTC = false;
+
+$: startsAt = _startsAt ? weblocaltime(_startsAt, { showYear: false, utc: displayUTC }) : {};
+
+function toggleUTC() {
+  displayUTC = !displayUTC;
+}
+```
+
+**HTML template part (view):**
+
+```html
+<div class="starts_at">              
+  <span class="event_time">
+    {startsAt.emoji} {startsAt.date} 
+    <span class='deemph'>at</span> 
+    {startsAt.time} <span class='deemph'>{startsAt.timeClarification}</span>
+  </span>              
+</div>
+
+<div class="timezone">
+  {startsAt.timezone} | 
+  <a href="#" on:click|preventDefault={() => toggleUTC()}>{displayUTC ? 'My timezone' : 'UTC'}</a>
+</div>
+```
+
+You can use the `weblocaltime` function in a similar way from other [frontend frameworks](https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks) like React, Ember or Vue.
+
+## Job Ad(s)
+
+If you are good with **Svelte** and **HTML / CSS** please write to info@uniqpath.com, we would like you to create an extensible Svelte component based on this so we can make this a dependency of our website and to make this useful in other parts of the system, like our ZetaSeek search engine.
+
+You can also create an issue in this GitHub repository or talk to us through [Discord](https://discord.gg/XvJzmtF).
+
+This task is paid fairly but must be executed in at most 1-2 weeks from the start and with high quality. 
+
+Thank you very much.
+
+<hr>
+
+There is more opportunities besides the creation of **Local Time Event Svelte component**. 
+
+If you think you can improve this library in any way, please reach  out, now is the right time to define and consolidate api, do some more testing and release the `v1.0` of this simple utility.
+
+## Definition of the problem
+
+**This should possible be the proper way to start the document but we still decided to go with more practical examples of the solution first since everyone can identify with the problem even without formal specification.**
+
+<hr>
 
 There are many hidden issues and edge cases when trying to make clear exactly what time an event is happening.
 
@@ -42,7 +179,7 @@ But this is only the beginning, even with this **there are many opporunities for
 
 Examples:
 
-`Friday Nov 27 at 9:00` 
+`Friday Nov 27 at 9:00`
 
 This supposes we used 24h time format (0h-23h) because we don't see explicit am/pm tags. We cannot be really sure though because perhaps am/pm denotation was omitted by mistake → So is this event at `9 am` or `9 pm`? If we usually don't even use the 24h format in our country and are not familiar with it, then we actually assume that am/pm tags are missing and we are confused.
 
@@ -68,10 +205,10 @@ Most users not readily familiar with 12h format are instantly confused by this. 
 - For `noon` (= 12:xx) we will show this: `12:15 (noon)`. If we also show emoji, this is represented with ☀️.
 - For times after `noon` (>= 13:00) we will show the time in **both formats** (24h and 12h). Example: `19:50 (7:50 pm)`
 - In addition we always clarify what time of day it is (`morning`, `daytime`, `noon`, ` evening` or `night` / `midnight`). Example: `19:50 (7:50 pm) evening`
-- Furthermore we can show an **emoji** as well. 
+- Furthermore we can show an **emoji** as well.
 - We also allow users to always see the date/time in `UTC` timezone besides their local timezone.
 
-This should do the trick. [Solution](https://github.com/dmtsys/weblocaltime/blob/main/src/index.js) is under 70 LOC _(lines-of-code)_.
+This should do the trick. [Solution](https://github.com/dmtsys/weblocaltime/blob/main/src/index.js) is around 70 LOC _(lines-of-code)_.
 
 ## API
 
@@ -91,7 +228,7 @@ const { date, time, timeClarification, emoji, timezone, parts } = weblocaltime(d
   emoji: '🌆',
   timezone: 'Central European Standard Time',
   parts: {
-    day: '30',    
+    day: '30',
     month: 'December',
     monthShort: 'Dec',
     monthNumeric: '12',
@@ -149,9 +286,9 @@ const { date, time, timeClarification, emoji, timezone, parts } = weblocaltime(d
 }
 ````
 
-ISO8601 date we passed in was specified in `+0500` timezone offset this time. 
+ISO8601 date we passed in was specified in `+0500` timezone offset this time.
 
-We asked for the representation in `UTC` instead of browser local timezone in this example. 
+We asked for the representation in `UTC` instead of browser local timezone in this example.
 
 This representation can be used to show your users the time in `UTC` (on request) in addition to their local timezone so that there is absolutely no confusion.
 
@@ -191,15 +328,19 @@ import weblocaltime from 'weblocaltime';
 ...
 ```
 
-Library is bundled for browser and node.js, it should work with `rollup` and other module bundlers.
+Library is ready to be bundled for browser and node.js, it should work with `rollup` and other module bundlers.
 
-## Building manually
+## Building bundle manually
+
+If you cloned the repo instead of installing the npm module, you can create bundles yourself.
 
 Running `npm run build` will produce `./dist/index.js` (CommonJS) and `./dist/index.mjs` (modern ES6).
 
+Published npm package consists of exactly these two files.
+
 ## Warnings
 
-⚠️ Browsers do not parse ISO8601 date format reliably, always pass datetime into your frontend as [unix timestamp](https://en.wikipedia.org/wiki/Unix_time) _(milliseconds since  00:00:00 UTC) on 1 January 1970 - an arbitrary date; leap seconds are ignored)_. 
+⚠️ Browsers do not parse ISO8601 date format reliably, always pass datetime into your frontend as [unix timestamp](https://en.wikipedia.org/wiki/Unix_time) _(milliseconds since  00:00:00 UTC) on 1 January 1970 - an arbitrary date; leap seconds are ignored)_.
 
 ```js
 > Date.now()
@@ -209,5 +350,12 @@ Running `npm run build` will produce `./dist/index.js` (CommonJS) and `./dist/in
 ```
 
 Parse unix timestamp on the frontend by passing the timestamp into `Date` constructor and then use this object with `weblocaltime` function. This is the most reliable way with no edge cases.
+
+```js
+> new Date('2020-12-31T23:00:00+0000').getTime()
+1609455600000
+```
+
+👆This is how you get the unix timestamp from plain JS Date object.
 
 Use this [great utility](https://www.epochconverter.com/) as a handy helper when you need to make sure you are working with correct dates and to prevent bugs.
