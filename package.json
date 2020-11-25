@@ -1,6 +1,6 @@
 {
   "name": "weblocaltime",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Reliably convert time to local timezone in user browser",
   "type": "module",
   "scripts": {

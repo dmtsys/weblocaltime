@@ -11,6 +11,7 @@ function localTime(date, { utc = false } = {}) {
     day: date.toLocaleString('default', { day: 'numeric', timeZone }),
     month: date.toLocaleString('default', { month: 'long', timeZone }),
     monthShort: date.toLocaleString('default', { month: 'short', timeZone }),
+    monthNumeric: date.toLocaleString('default', { month: 'numeric', timeZone }),
     year: date.toLocaleString('default', { year: 'numeric', timeZone }),
     hour: date.toLocaleString('default', { hour: 'numeric', hour12: false, timeZone }),
     minute: date.toLocaleString('default', { minute: 'numeric', timeZone }).padStart(2, '0'), // 2-digit didn't work reliably here, so we pad ourselves!!
