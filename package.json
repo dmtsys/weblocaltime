@@ -1,6 +1,6 @@
 {
 	"name": "weblocaltime",
-	"version": "0.0.11",
+	"version": "0.0.14",
 	"description": "Reliably convert time to local timezone in user browser",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",

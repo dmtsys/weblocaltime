@@ -78,7 +78,7 @@ function getDaytime(hour: number) {
 
 export default function weblocaltime(date: Date, options: WebLocalTimeOptions = {}) {
     const showYear = options.showYear || true
-    const parts = localTime(date, { utc: options.utc })
+    const parts = localTime(date || new Date(), { utc: options.utc })
 
     const { weekday, monthShort, day, hour24, time24, time12, year } = parts
     const hour = Number(hour24)
