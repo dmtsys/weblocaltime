@@ -48,6 +48,8 @@ export interface WebLocalTimeOptions extends LocalTimeOptions {
      */
     showYear?: true
 }
+/* does not generate actual code to set this default value to true, we have to do it manually, see below
+TODO: investigate this entire topic! */
 
 function getDaytime(hour: number) {
     let emoji
@@ -77,7 +79,9 @@ function getDaytime(hour: number) {
 }
 
 export default function weblocaltime(date: Date, options: WebLocalTimeOptions = {}) {
-    const showYear = options.showYear || true
+    // the only way to have showYear default value 'true' that I could figure out :/
+    const showYear = options.showYear == null ? true : options.showYear;
+
     const parts = localTime(date || new Date(), { utc: options.utc })
 
     const { weekday, monthShort, day, hour24, time24, time12, year } = parts
